@@ -1,7 +1,7 @@
 let request = require('supertest');
 const superagent = require('superagent');
 let agent = superagent.agent();
-const CONFIG = require('./../config/config');
+const CONFIG = require('../config/config');
 
 const theAccount = {
   email: 'andre.mashukov@gmail.com',

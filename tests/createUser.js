@@ -1,5 +1,5 @@
 const supertest = require('supertest');
-const CONFIG = require('./../config/config');
+const CONFIG = require('../config/config');
 
 describe('Creating a new user', function() {
   let user = {};
