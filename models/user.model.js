@@ -6,54 +6,54 @@ const {TE, to} = require('../services/util.service');
 const CONFIG = require('../config/config');
 
 module.exports = (sequelize, DataTypes) => {
-	var Model = sequelize.define('User', {
-		firstname: DataTypes.STRING,
-		lastname: DataTypes.STRING,
-		policy_code: DataTypes.STRING,
-		dob: DataTypes.DATEONLY,
-		email: {type: DataTypes.STRING, allowNull: true, unique: true, validate: { isEmail: {msg: 'Phone number invalid.'} }},
-		password: DataTypes.STRING,
-	});
+  const Model = sequelize.define('User', {
+    firstname: DataTypes.STRING,
+    lastname: DataTypes.STRING,
+    policy_code: DataTypes.STRING,
+    dob: DataTypes.DATEONLY,
+    email: {type: DataTypes.STRING, allowNull: true, unique: true, validate: {isEmail: {msg: 'Phone number invalid.'}}},
+    password: DataTypes.STRING,
+  });
 
-	Model.associate = function(models){
-		this.Results = this.belongsToMany(models.Result, {through: 'UserResult'});
-	};
-	
-	Model.beforeSave(async (user, options) => {
-		let err;
-		if (user.changed('password')){
-			let salt, hash;
-			[err, salt] = await to(bcrypt.genSalt(10));
-			if(err) TE(err.message, true);
+  Model.associate = function(models) {
+    this.Results = this.belongsToMany(models.Result, {through: 'UserResult'});
+  };
 
-			[err, hash] = await to(bcrypt.hash(user.password, salt));
-			if(err) TE(err.message, true);
+  Model.beforeSave(async (user, options) => {
+    let err;
+    if (user.changed('password')) {
+      let salt; let hash;
+      [err, salt] = await to(bcrypt.genSalt(10));
+      if (err) TE(err.message, true);
 
-			user.password = hash;
-		}
-	});
+      [err, hash] = await to(bcrypt.hash(user.password, salt));
+      if (err) TE(err.message, true);
 
-	Model.prototype.comparePassword = async function (pw) {
-		let err, pass;
-		if(!this.password) TE('password not set');
+      user.password = hash;
+    }
+  });
 
-		[err, pass] = await to(bcrypt_p.compare(pw, this.password));
-		if(err) TE(err);
+  Model.prototype.comparePassword = async function(pw) {
+    let err; let pass;
+    if (!this.password) TE('password not set');
 
-		if(!pass) TE('invalid password');
+    [err, pass] = await to(bcrypt_p.compare(pw, this.password));
+    if (err) TE(err);
 
-		return this;
-	};
+    if (!pass) TE('invalid password');
 
-	Model.prototype.getJWT = function () {
-		let expiration_time = parseInt(CONFIG.jwt_expiration);
-		return 'Bearer '+ jwt.sign({user_id:this.id}, CONFIG.jwt_encryption, {expiresIn: expiration_time});
-	};
+    return this;
+  };
 
-	Model.prototype.toWeb = function (pw) {
-		let json = this.toJSON();
-		return json;
-	};
+  Model.prototype.getJWT = function() {
+    const expirationTime = parseInt(CONFIG.jwt_expiration);
+    return 'Bearer '+ jwt.sign({user_id: this.id}, CONFIG.jwt_encryption, {expiresIn: expirationTime});
+  };
 
-	return Model;
+  Model.prototype.toWeb = function(pw) {
+    const json = this.toJSON();
+    return json;
+  };
+
+  return Model;
 };

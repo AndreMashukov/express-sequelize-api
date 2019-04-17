@@ -1,7 +1,7 @@
 require('dotenv').config();
-let CONFIG = {}; 
+const CONFIG = {};
 CONFIG.app = process.env.APP || 'dev';
-CONFIG.port = process.env.PORT  || '3000';
+CONFIG.port = process.env.PORT || '3000';
 
 CONFIG.db_dialect = process.env.DB_DIALECT || 'mysql';
 CONFIG.db_host = process.env.DB_HOST || 'localhost';

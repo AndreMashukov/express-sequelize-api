@@ -4,44 +4,42 @@ const {to, ReE, ReS} = require('../services/util.service');
 const create = async function(req, res) {
   let err; let result;
   const user = req.user;
-  const result_info = req.body;
+  const resultInfo = req.body;
 
-  [err, result] = await to(Result.create(result_info));
+  [err, result] = await to(Result.create(resultInfo));
   if (err) return ReE(res, err, 422);
 
   result.addUser(user, {through: {status: 'started'}})
 
-      [err, result] = await to(result.save());
+  [err, result] = await to(result.save());
   if (err) return ReE(res, err, 422);
 
-  const result_json = result.toWeb();
-  result_json.users = [{user: user.id}];
+  const resultJson = result.toWeb();
+  resultJson.users = [{user: user.id}];
 
-  return ReS(res, {result: result_json}, 201);
+  return ReS(res, {result: resultJson}, 201);
 };
 module.exports.create = create;
 
 const getAll = async function(req, res) {
   const user = req.user;
-  let err; let results;
-
   [err, results] = await to(user.getResults({include: [{association: Result.Users}]}));
 
-  const results_json =[];
-  for (const i in results) {
+  const resultsJson =[];
+  for (let i = 0; i < results.length; i++) {
     const result = results[i];
     const users = result.Users;
-    const result_info = result.toWeb();
-    const users_info = [];
-    for (const i in users) {
-      const user = users[i];
-      users_info.push({user: user.id});
+    const resultInfo = result.toWeb();
+    const usersInfo = [];
+    for (let j = 0; j< users.length; j++) {
+      const user = users[j];
+      usersInfo.push({user: user.id});
     }
-    result_info.users = users_info;
-    results_json.push(result_info);
+    resultInfo.users = usersInfo;
+    resultsJson.push(resultInfo);
   }
 
-  console.log('r t', results_json);
-  return ReS(res, {results: results_json});
+  console.log('r t', resultsJson);
+  return ReS(res, {results: resultsJson});
 };
 module.exports.getAll = getAll;

@@ -1,5 +1,4 @@
 const supertest = require('supertest');
-const assert = require('assert');
 const CONFIG = require('./../config/config');
 
 describe('Creating a new user', function() {

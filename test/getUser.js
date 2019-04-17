@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 let request = require('supertest');
 const superagent = require('superagent');
 let agent = superagent.agent();
@@ -14,20 +13,16 @@ let token;
 request = request('http://localhost:' + CONFIG.port);
 
 describe('Get User', () => {
-
   before(function(done) {
     agent = superagent.agent();
-    request
-		  .post('/v1/users/login')
-		  .send(theAccount)
-		  .end(function(err, res) {
-          if (err) {
-			  throw err;
-          }
-          token = res.body.token;
-          done();
-		  });
-	  });
+    request.post('/v1/users/login').send(theAccount).end(function(err, res) {
+      if (err) {
+        throw err;
+      }
+      token = res.body.token;
+      done();
+    });
+  });
 
   it('Should return 200 response code', (done) => {
     request

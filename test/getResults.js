@@ -13,21 +13,17 @@ let token;
 request = request('http://localhost:' + CONFIG.port);
 
 describe('Get Results', () => {
-
   before(function(done) {
     agent = superagent.agent();
-    request
-		  .post('/v1/users/login')
-		  .send(theAccount)
-		  .end(function(err, res) {
-          if (err) {
-			  throw err;
-          }
+    request.post('/v1/users/login').send(theAccount).end(function(err, res) {
+      if (err) {
+        throw err;
+      }
 
-          token = res.body.token;
-          done();
-		  });
-	  });
+      token = res.body.token;
+      done();
+    });
+  });
 
   it('Should return 200 response code', (done) => {
     request
