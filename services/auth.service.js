@@ -22,7 +22,7 @@ const getUniqueKeyFromBody = function(body) {
 module.exports.getUniqueKeyFromBody = getUniqueKeyFromBody;
 
 const createUser = async (userInfo) => {
-  const authInfo={};
+  const authInfo = {};
   authInfo.status='create';
 
   const uniqueKey = getUniqueKeyFromBody(userInfo);
@@ -67,13 +67,12 @@ const authUser = async function(userInfo) {
 
     [err, user] = await to(User.findOne({where: {email: uniqueKey}}));
     if (err) TE(err.message);
-
-  } else if (validator.isMobilePhone(uniqueKey, 'any')) {// checks if only phone number was sent
+  } else if (validator.isMobilePhone(uniqueKey, 'any')) {
+    // Checks if only phone number was sent
     authInfo.method='phone';
 
     [err, user] = await to(User.findOne({where: {phone: uniqueKey}}));
     if (err) TE(err.message);
-
   } else {
     TE('A valid email or phone number was not entered');
   }
@@ -85,6 +84,5 @@ const authUser = async function(userInfo) {
   if (err) TE(err.message);
 
   return user;
-
 };
 module.exports.authUser = authUser;
