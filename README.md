@@ -1,7 +1,7 @@
 # Rest Api
 
 ## Description
-This is an Restful API which uses Node.js and Mysql. 
+This is a Restful API template which uses Node.js and Mysql. 
 
 ##### Routing         : Express
 ##### ORM Database    : Sequelize
